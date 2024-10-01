@@ -49,6 +49,12 @@ $grid.Children.Add($GuessButton)
 # Jeu
 $GuessButton.Add_Click({
     $userGuess = [int]$GuessInput.Text
+
+    if($userGuess -lt 1 -or $userGuess -gt 100) {
+        [System.Windows.MessageBox]::Show("Veuillez entrer un nombre entre 1 et 100 !", "Erreur")
+        return
+    }
+
     $global:tries++
     $TriesLabel.Content = "Nombre d'essais : $global:tries"
 
