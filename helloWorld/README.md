@@ -2,7 +2,7 @@
 
 This is a simple hello world program in powershell.
 
-How to run the program:
+### How to run the program:
 Execute the file `helloWorld.ps1` in powershell.
 
 ```powershell
