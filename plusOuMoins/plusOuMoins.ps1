@@ -48,7 +48,13 @@ $grid.Children.Add($GuessButton)
 
 # Jeu
 $GuessButton.Add_Click({
-    $userGuess = [int]$GuessInput.Text
+    try {
+        $userGuess = [int]$GuessInput.Text
+    } catch {
+        [System.Windows.MessageBox]::Show("Veuillez entrer un nombre valide !", "Erreur")
+        return
+    }
+
 
     if($userGuess -lt 1 -or $userGuess -gt 100) {
         [System.Windows.MessageBox]::Show("Veuillez entrer un nombre entre 1 et 100 !", "Erreur")
@@ -85,6 +91,35 @@ $ReplayButton.Add_Click({
     $ReplayButton.Visibility = "Hidden"
     Start-Game
 })
+
+
+$LabelCredit = New-Object System.Windows.Controls.TextBlock
+$LabelCredit.Text = "Créé par @Fredray-21"
+$LabelCredit.FontSize = 16
+$LabelCredit.HorizontalAlignment = "Center"
+$LabelCredit.VerticalAlignment = "Bottom"
+$LabelCredit.Margin = "0,0,0,0"
+$LabelCredit.Cursor = "Hand"
+$LabelCredit.Foreground = "Blue"
+$LabelCredit.ToolTip = "Cliquez pour accéder à mon GitHub"
+
+$LabelCredit.Add_MouseLeftButtonDown({
+    Start-Process "https://github.com/Fredray-21"
+})
+
+$LabelCredit.Add_MouseEnter({
+    $LabelCredit.TextDecorations = [System.Windows.TextDecorations]::Underline
+})
+
+$LabelCredit.Add_MouseLeave({
+    $LabelCredit.TextDecorations = [System.Windows.TextDecorations]::None
+})
+
+$LabelCredit.Add_MouseRightButtonDown({
+    [System.Windows.MessageBox]::Show("Coucouuu !", "Info")
+})
+
+$grid.Children.Add($LabelCredit)
 
 
 $window.Content = $grid
