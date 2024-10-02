@@ -16,3 +16,5 @@ Execute the file `plusOuMoins.ps1` with PowerShell.
 # RELEASES
 - **_[01/10/2024]_**  
   - Implement the game logic and interface.
+- **_[02/10/2024]_**  
+  - Add the possibility to choose the range of numbers.

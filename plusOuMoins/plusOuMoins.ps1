@@ -1,19 +1,74 @@
 Add-Type -AssemblyName PresentationFramework
+Add-Type -AssemblyName Microsoft.VisualBasic
 
-function Start-Game {
-    $global:randomNumber = Get-Random -Minimum 1 -Maximum 100
-    $global:tries = 0
-    $TriesLabel.Content = "Nombre d'essais : $global:tries"
-    $GuessInput.Text = ""
-    [System.Windows.MessageBox]::Show("Nouvelle partie, devinez un nombre entre 1 et 100 ! 🎮", "Jeu du Plus ou Moins")
-}
-
+$global:isCancelled = $false
 # Fenêtre
 $window = New-Object system.windows.window
 $window.Title = "Jeu du Plus ou Moins"
 $window.Width = 500
 $window.Height = 500
 $window.WindowStartupLocation = "CenterScreen"
+
+function Start-Game
+{
+    [System.Windows.MessageBox]::Show("Bienvenue dans le jeu du Plus ou Moins ! 🎮", "Jeu du Plus ou Moins")
+
+    while ($true)
+    {
+        $global:minNumber = [Microsoft.VisualBasic.Interaction]::InputBox("Entrez la valeur minimale", "Jeu du Plus ou Moins", "1")
+
+        if ( [string]::IsNullOrEmpty($global:minNumber))
+        {
+            [System.Windows.MessageBox]::Show("Le jeu a été annulé.", "Annulation")
+            $global:isCancelled = $true
+            $window.Close()
+            return
+        }
+
+
+        if (-not [int]::TryParse($global:minNumber, [ref]$null))
+        {
+            [System.Windows.MessageBox]::Show("Veuillez entrer un nombre valide pour la valeur minimale !", "Erreur")
+            continue
+        }
+        break
+    }
+
+    while ($true)
+    {
+        $global:maxNumber = [Microsoft.VisualBasic.Interaction]::InputBox("Entrez la valeur maximale", "Jeu du Plus ou Moins", "100")
+
+        if ( [string]::IsNullOrEmpty($global:maxNumber))
+        {
+            [System.Windows.MessageBox]::Show("Le jeu a été annulé.", "Annulation")
+            $global:isCancelled = $true
+            $window.Close()
+            return
+        }
+
+        if (-not [int]::TryParse($global:maxNumber, [ref]$null))
+        {
+            [System.Windows.MessageBox]::Show("Veuillez entrer un nombre valide pour la valeur maximale !", "Erreur")
+            continue
+        }
+
+        if ([int]$global:minNumber -ge [int]$global:maxNumber)
+        {
+            [System.Windows.MessageBox]::Show("La valeur minimale doit être inférieure à la valeur maximale !", "Erreur")
+            continue
+        }
+
+        break
+    }
+
+    $global:randomNumber = Get-Random -Minimum $global:minNumber -Maximum $global:maxNumber
+}
+
+Start-Game
+if ($global:isCancelled)
+{
+    return
+}
 
 # Grid
 $grid = New-Object System.Windows.Controls.Grid
@@ -56,8 +111,9 @@ $GuessButton.Add_Click({
     }
 
 
-    if($userGuess -lt 1 -or $userGuess -gt 100) {
-        [System.Windows.MessageBox]::Show("Veuillez entrer un nombre entre 1 et 100 !", "Erreur")
+    if ($userGuess -lt $global:minNumber -or $userGuess -gt $global:maxNumber)
+    {
+        [System.Windows.MessageBox]::Show("Veuillez entrer un nombre entre $global:minNumber et $global:maxNumber !", "Erreur")
         return
     }
 
@@ -123,5 +179,4 @@ $grid.Children.Add($LabelCredit)
 
 
 $window.Content = $grid
-Start-Game
-$window.ShowDialog()
+$window.ShowDialog() | Out-Null
