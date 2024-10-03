@@ -1,0 +1,134 @@
+@import "modal.css";
+
+td {
+    background-color: white;
+    width: calc(100vw / 100);
+    height: calc(100vw / 140);
+}
+
+table {
+    background-color: black;
+}
+
+body {
+    margin: 0;
+    padding: 60px 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+#root {
+    padding: 0 10px;
+}
+
+#toolBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 50px;
+    z-index: 100;
+}
+
+#toolBar h1 span {
+    font-size: 0.5em;
+    color: #fff
+}
+
+#toolBar h1 span a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+#toolBar h1 span a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+#toggleGame {
+    background-color: #43b643;
+    color: white;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#toggleGame:hover {
+    background-color: #3a9e3a;
+}
+
+#clear {
+    background-color: #e15e5e;
+    color: white;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#clear:hover {
+    background-color: #e63a3a;
+}
+
+#useTemplate {
+    background-color: #3a6c9e;
+    color: white;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#useTemplate:hover {
+    background-color: #2a477e;
+}
+
+#quitTemplateMode {
+    background-color: #e15e5e;
+    color: white;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#quitTemplateMode:hover {
+    background-color: #e63a3a;
+}
+
+
+
+
+@media (max-width: 750px) {
+    #toolBar h1 {
+        display: none;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+

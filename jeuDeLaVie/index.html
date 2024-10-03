@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de la vie</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+<div id="toolBar">
+    <h1>Jeu de la vie <span>By <a target="_blank" href="https://github.com/Fredray-21">@Fredray-21</a></span></h1>
+    <input id="quitTemplateMode" type="button" value="Quitter le mode template" style="display:none;">
+    <div>
+        <input id="toggleGame" type="button" value="Lancer la génération">
+        <input id="clear" type="button" value="Effacer les cellules">
+        <input id="useTemplate" type="button" value="Utiliser un template">
+    </div>
+</div>
+
+<div id="root"></div>
+
+<div id="templateModal" style="display:none;">
+    <div id="templateList"></div>
+    <input id="closeTemplateModal" type="button" value="Fermer">
+</div>
+
+<script type="module" src="./assets/js/main.js"></script>
+</body>
+
+</html>
