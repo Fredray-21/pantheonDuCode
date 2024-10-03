@@ -17,5 +17,5 @@ Then open your browser and go to `http://localhost:8080/`.
 
 
 # RELEASES
-- **_[01/10/2024]_**
+- **_[04/10/2024]_**
   - Implement the game logic and interface.
