@@ -32,8 +32,13 @@ public class HangmanGame extends JFrame {
         // Ici on a init le mot (custom ou aléatoire en fonction de la langue)
 
         motAffiche = new char[mot.length()];
-        for (int i = 0; i < motAffiche.length; i++) {
-            motAffiche[i] = '_';
+        for (int i = 0; i < mot.length(); i++) {
+            char currentChar = mot.charAt(i);
+            if (Character.isLetter(currentChar)) {
+                motAffiche[i] = '_';
+            } else {
+                motAffiche[i] = currentChar;
+            }
         }
 
         traduction.setLanguage(language);
@@ -50,11 +55,13 @@ public class HangmanGame extends JFrame {
 
         letterField = new JTextField(1);
 
-        //On limite l'input à une seule lettre
+        //On limite l'input à une seule lettre, et uniquement les lettres alphabétiques
         letterField.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
-                if (letterField.getText().length() >= 1 )
+                char c = e.getKeyChar();
+                if (!Character.isLetter(c) || letterField.getText().length() >= 1) {
                     e.consume();
+                }
             }
         });
 
@@ -108,6 +115,13 @@ public class HangmanGame extends JFrame {
         if (input.length() == 1) {
             char lettre = input.charAt(0);
 
+            if (!Character.isLetter(lettre)) {
+                messageLabel.setText(traduction.getTranslation("game.invalidLetter"));
+                messageLabel.setForeground(Color.RED);
+                letterField.setText("");
+                return;
+            }
+
             lettre = normaliserLettre(lettre);
 
             if (lettresDejaDonnees.contains(lettre)) {
@@ -122,7 +136,8 @@ public class HangmanGame extends JFrame {
 
             // On parcourt le mot pour voir si la lettre est dedans
             for (int i = 0; i < mot.length(); i++) {
-                if (normaliserLettre(mot.charAt(i)) == lettre) {
+                char lettreMot = normaliserLettre(Character.toLowerCase(mot.charAt(i)));
+                if (lettreMot == lettre) {
                     motAffiche[i] = mot.charAt(i);
                     lettreTrouvee = true;
                 }

@@ -15,3 +15,6 @@ Or look how to compile and run Java program [here]("https://fr.wikihow.com/compi
     - Add basic functionality to the game + GUI + Traduction of the labels game.
 - **_[06/10/2024]_**
     - Managing words with accents.
+- **_[06/10/2024]_**
+  - Input management (character / number / ...).
+
