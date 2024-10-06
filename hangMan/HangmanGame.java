@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 public class HangmanGame extends JFrame {
     private JLabel wordLabel;
@@ -106,6 +108,8 @@ public class HangmanGame extends JFrame {
         if (input.length() == 1) {
             char lettre = input.charAt(0);
 
+            lettre = normaliserLettre(lettre);
+
             if (lettresDejaDonnees.contains(lettre)) {
                 messageLabel.setForeground(Color.BLUE);
                 messageLabel.setText(traduction.getTranslation("game.alreadyGuessed") + lettre);
@@ -118,8 +122,8 @@ public class HangmanGame extends JFrame {
 
             // On parcourt le mot pour voir si la lettre est dedans
             for (int i = 0; i < mot.length(); i++) {
-                if (mot.charAt(i) == lettre) {
-                    motAffiche[i] = lettre;
+                if (normaliserLettre(mot.charAt(i)) == lettre) {
+                    motAffiche[i] = mot.charAt(i);
                     lettreTrouvee = true;
                 }
             }
@@ -150,6 +154,13 @@ public class HangmanGame extends JFrame {
             messageLabel.setForeground(Color.RED);
         }
     }
+
+    private char normaliserLettre(char lettre) {
+        String lettreStr = String.valueOf(lettre);
+        String normalisee = Normalizer.normalize(lettreStr, Normalizer.Form.NFD);
+        return Pattern.compile("\\p{InCombiningDiacriticalMarks}+").matcher(normalisee).replaceAll("").charAt(0);
+    }
+
 
     private void rejouer(String language) {
         tentativesRestantes = 6;
