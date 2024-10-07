@@ -11,13 +11,11 @@ let rightPaddleY = canvas.height / 2 - paddleHeight / 2;
 
 let ballX = canvas.width / 2;
 let ballY = canvas.height / 2;
-let ballSpeedX = 3;
-let ballSpeedY = 3;
 
 let leftPlayerScore = 0;
 let rightPlayerScore = 0;
 
-let isMultiplayer = false; // Par défaut, le mode contre l'IA
+let isMultiplayer = false;
 const dvdLogo = new Image();
 
 const listOfColors = ["#8cdf57", "#908160", "#5d9bee", "#99cc91", "#8c6697", "#30abc1", "#6b9d6e", "#6b9d6e", "#5f735a", "#6b7991", "#3fac8f", "#8c51b4", "#dea253", "#5e57d0", "#33ab5c", "#90cdc1"];
@@ -27,10 +25,18 @@ let animationId = null;
 
 let username = "";
 let socket = null;
-let gameState = "waiting"; // États possibles : "waiting", "playing", "finished"
+let gameState = "waiting";
 let gameRole = null;
 
-// Gérer le choix du mode de jeu
+
+// local IA :
+let ballSpeedX = 3;
+let ballSpeedY = 3;
+
+// Variables pour stocker les listeners d'event
+let mouseMoveListener;
+let multiplayerMouseMoveListener;
+
 document.getElementById("vsIA").addEventListener("click", () => {
     startGame(false);
 });
@@ -42,42 +48,47 @@ document.getElementById("multiplayer").addEventListener("click", () => {
     }
 });
 
-// Démarrer le jeu en fonction du mode sélectionné
-function startGame(multiplayer) {
+const startGame = (multiplayer) => {
     isMultiplayer = multiplayer;
-    if(isMultiplayer) {
+    if (isMultiplayer) {
         connectToServer();
-    } else
-    {
+    } else {
         document.getElementById("menu").style.display = "none";
         canvas.style.display = "block";
         document.body.style.cursor = "none";
-        document.addEventListener("mousemove", function (event) {
+        mouseMoveListener = (event) => {
             const canvasPosition = canvas.getBoundingClientRect();
-            leftPaddleY = event.clientY - canvasPosition.top - paddleHeight / 2;
-        });
+            if (event.clientY - canvasPosition.top - paddleHeight / 2 < 0) {
+                leftPaddleY = 0;
+            } else if (event.clientY - canvasPosition.top - paddleHeight / 2 > canvas.height - paddleHeight) {
+                leftPaddleY = canvas.height - paddleHeight;
+            } else {
+                leftPaddleY = event.clientY - canvasPosition.top - paddleHeight / 2;
+            }
+        };
+
+        document.addEventListener("mousemove", mouseMoveListener);
 
         dvdLogo.src = './DVD_logo.svg';
-        dvdLogo.onload = function () {
+        dvdLogo.onload = () => {
             draw();
         };
     }
 }
 
-// Fonction pour gérer la connexion au serveur WebSocket (mode multijoueur)
-function connectToServer() {
+connectToServer = () => {
     socket = new WebSocket("ws://localhost:3000");
 
-    socket.onopen = function () {
+    socket.onopen = () => {
         console.log("Connecté au serveur WebSocket");
-        socket.send(JSON.stringify({ type: "join", username: username }));
+        socket.send(JSON.stringify({type: "join", username: username}));
     };
 
-    socket.onclose = function () {
+    socket.onclose = () => {
         console.log("Déconnecté du serveur WebSocket");
     }
 
-    socket.onmessage = function (event) {
+    socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         if (data.type === "waiting") {
             document.getElementById("waitingMessage").innerText = data.message;
@@ -86,65 +97,61 @@ function connectToServer() {
             gameState = data.state;
             if (gameState === "playing") {
                 gameRole = data.role;
-                // Commencer le jeu
                 document.getElementById("waitingMessage").style.display = "none";
                 document.getElementById("menu").style.display = "none";
                 canvas.style.display = "block";
 
                 dvdLogo.src = './DVD_logo.svg';
-                dvdLogo.onload = function () {
+                dvdLogo.onload = () => {
                     draw();
                 };
-
             } else if (gameState === "finished") {
-                // Afficher le résultat de la partie
                 alert(data.winner);
                 resetGame();
                 document.getElementById("menu").style.display = "flex";
             }
+        } else if (data.type === "update") {
+            // Receive paddle and ball updates from the server
+            if (gameRole === "left") {
+                rightPaddleY = data.rightPaddleY;
+                ballX = data.ballX;
+                ballY = data.ballY;
+            } else {
+                leftPaddleY = data.leftPaddleY;
+                ballX = data.ballX; // Mirror ball for right player
+                ballY = data.ballY;
+            }
+            leftPlayerScore = data.leftPlayerScore;
+            rightPlayerScore = data.rightPlayerScore;
+        } else if (data.type === "color") {
+            currentColor = data.color;
         }
     };
 
-    document.addEventListener("mousemove", function (event) {
+    multiplayerMouseMoveListener = (event) => {
         const canvasPosition = canvas.getBoundingClientRect();
-        leftPaddleY = event.clientY - canvasPosition.top - paddleHeight / 2;
+        if (gameRole === "left") {
+            leftPaddleY = event.clientY - canvasPosition.top - paddleHeight / 2;
+        } else {
+            rightPaddleY = event.clientY - canvasPosition.top - paddleHeight / 2;
+        }
         sendPosition();
-    });
+    };
 
-    function sendPosition() {
+    document.addEventListener("mousemove", multiplayerMouseMoveListener);
+
+    const sendPosition = () => {
         if (socket && socket.readyState === WebSocket.OPEN) {
-            socket.send(JSON.stringify({ type: "update", paddleY: leftPaddleY }));
+            if (gameRole === "left") {
+                socket.send(JSON.stringify({type: "update", leftPaddleY: leftPaddleY}));
+            } else {
+                socket.send(JSON.stringify({type: "update", rightPaddleY: rightPaddleY}));
+            }
         }
     }
 }
 
-function updateAI() {
-    // L'IA suit la position de la balle
-    if (ballY > rightPaddleY + paddleHeight / 2) {
-        rightPaddleY += 5;
-    } else {
-        rightPaddleY -= 5;
-    }
-}
-
-function resetBall() {
-    if (ballSpeedX < 0) {
-        ballX = canvas.width / 1.2;
-    } else {
-        ballX = canvas.width / 4;
-    }
-
-    ballY = canvas.height / 2;
-
-    // Augmenter la vitesse de la balle en fonction des scores
-    const speedIncrease = 0.2;
-    const maxSpeed = 5;
-
-    ballSpeedX += ballSpeedX > 0 ? Math.min(speedIncrease, maxSpeed - ballSpeedX) : -Math.min(speedIncrease, maxSpeed + ballSpeedX);
-    ballSpeedY += ballSpeedY > 0 ? Math.min(speedIncrease, maxSpeed - ballSpeedY) : -Math.min(speedIncrease, maxSpeed + ballSpeedY);
-}
-
-function draw() {
+const draw = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = currentColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -167,28 +174,61 @@ function draw() {
     const logoWidth = 60;
     const logoHeight = 60;
     ctx.drawImage(dvdLogo, ballX - logoWidth / 2, ballY - logoHeight / 2, logoWidth, logoHeight);
-    ctx.filter = 'none';
 
-    // Mettre à jour la position de la balle
-    ballX += ballSpeedX;
-    ballY += ballSpeedY;
+    if (!isMultiplayer) updateAI();
 
-    if(isMultiplayer && gameRole === "left")
-    {
-        // send pos of ball
-        if (socket && socket.readyState === WebSocket.OPEN) {
-            socket.send(JSON.stringify({ type: "update", ballX: ballX, ballY: ballY }));
-        }
+    ctx.font = "120px Arial";
+    ctx.fillStyle = "white";
+    const leftScoreText = leftPlayerScore.toString();
+    const rightScoreText = rightPlayerScore.toString();
+    const leftTextWidth = ctx.measureText(leftScoreText).width;
+    const rightTextWidth = ctx.measureText(rightScoreText).width;
+    const leftScoreX = (canvas.width / 3 - leftTextWidth / 2);
+    ctx.fillText(leftScoreText, leftScoreX, 125);
+    const rightScoreX = (2 * canvas.width / 3 - rightTextWidth / 2);
+    ctx.fillText(rightScoreText, rightScoreX, 125);
+
+    if (leftPlayerScore === 11 || rightPlayerScore === 11) {
+        const winner = (leftPlayerScore === 11) ? "Tu as gagné !" : "L'IA a gagné !";
+        resetGame();
+        alert(`${winner} a gagné !`);
+        document.getElementById("menu").style.display = "flex";
+        return;
     }
 
+    animationId = requestAnimationFrame(draw);
+}
+
+const resetGame = () => {
+    canvas.style.display = "none";
+    cancelAnimationFrame(animationId);
+    document.body.style.cursor = "default";
+    leftPlayerScore = 0;
+    rightPlayerScore = 0;
+    ballX = canvas.width / 2;
+    ballY = canvas.height / 2;
+
+    // Retirer les event listeners s'ils existent
+    if (mouseMoveListener) {
+        document.removeEventListener("mousemove", mouseMoveListener);
+        mouseMoveListener = null;
+    }
+    if (multiplayerMouseMoveListener) {
+        document.removeEventListener("mousemove", multiplayerMouseMoveListener);
+        multiplayerMouseMoveListener = null;
+    }
+}
+
+const updateAI = () => {
     // Collision avec les murs haut et bas
     if (ballY < 0 || ballY > canvas.height) {
         ballSpeedY = -ballSpeedY;
         currentColor = listOfColors[Math.floor(Math.random() * listOfColors.length)];
     }
 
-    // Collision avec une rauqette
-    if ((ballX < paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) || (ballX > canvas.width - paddleWidth && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight)) {
+    // Collision avec une raquette
+    if ((ballX < paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) ||
+        (ballX > canvas.width - paddleWidth && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight)) {
         ballSpeedX = -ballSpeedX;
         currentColor = listOfColors[Math.floor(Math.random() * listOfColors.length)];
     }
@@ -205,52 +245,28 @@ function draw() {
         resetBall();
     }
 
-    // Si on joue contre l'IA
-    if (!isMultiplayer) updateAI();
+    // Update ball position
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
 
-    // Dessiner les scores (séparer le canvas en 3)
-    ctx.font = "120px Arial";
-    ctx.fillStyle = "white";
 
-    // Mesurer la largeur des textes pour les centrer
-    const leftScoreText = leftPlayerScore.toString();
-    const rightScoreText = rightPlayerScore.toString();
+    rightPaddleY = ballY - paddleHeight / 2;
 
-    const leftTextWidth = ctx.measureText(leftScoreText).width;
-    const rightTextWidth = ctx.measureText(rightScoreText).width;
-
-    // Score du joueur gauche : bien centré dans la première zone (1/3 du canvas)
-    const leftScoreX = (canvas.width / 3 - leftTextWidth / 2);
-    ctx.fillText(leftScoreText, leftScoreX, 125);
-
-    // Score du joueur droit : bien centré dans la troisième zone (2/3 du canvas)
-    const rightScoreX = (2 * canvas.width / 3 - rightTextWidth / 2);
-    ctx.fillText(rightScoreText, rightScoreX, 125);
-
-    // Vérifier si un joueur a atteint 11 points
-    if (leftPlayerScore === 11 || rightPlayerScore === 11) {
-        const winner = (leftPlayerScore === 11) ? "Joueur de gauche" : "Joueur de droite";
-        alert(`${winner} a gagné !`);
-
-        // Réinitialiser les scores
-        leftPlayerScore = 0;
-        rightPlayerScore = 0;
-
-        // Réinitialiser le game et afficher le menu
-        resetGame();
-        document.getElementById("menu").style.display = "flex";
+    // Limiter les mouvements de la raquette pour rester à l'intérieur du canvas
+    rightPaddleY = Math.max(Math.min(rightPaddleY, canvas.height - paddleHeight), 0);
+}
+const resetBall = () => {
+    if (ballSpeedX < 0) {
+        ballX = canvas.width / 1.2;
+    } else {
+        ballX = canvas.width / 4;
     }
 
-    animationId = requestAnimationFrame(draw);
-
-}
-
-const resetGame = () => {
-    canvas.style.display = "none";
-    cancelAnimationFrame(animationId);
-    document.body.style.cursor = "default";
-    leftPlayerScore = 0;
-    rightPlayerScore = 0;
-    ballX = canvas.width / 2;
     ballY = canvas.height / 2;
+
+    // Augmenter la vitesse de la balle en fonction des scores
+    const speedIncrease = 0.2;
+    const maxSpeed = 5;
+    ballSpeedX += ballSpeedX > 0 ? Math.min(speedIncrease, maxSpeed - ballSpeedX) : -Math.min(speedIncrease, maxSpeed + ballSpeedX);
+    ballSpeedY += ballSpeedY > 0 ? Math.min(speedIncrease, maxSpeed - ballSpeedY) : -Math.min(speedIncrease, maxSpeed + ballSpeedY);
 }
