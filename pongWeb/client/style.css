@@ -1,0 +1,48 @@
+@import "bg.css";
+
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000;
+    flex-direction: column;
+}
+
+#menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    gap: 1em;
+}
+
+#menu a {
+    color: white;
+    text-decoration: none;
+}
+
+#menu a:hover {
+    color: #ddd;
+    text-decoration: underline;
+}
+
+button {
+    background-color: white;
+    color: black;
+    font-size: 18px;
+    padding: 15px 30px;
+    border: none;
+    margin: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #ddd;
+}
+
+canvas {
+    border: 2px solid white;
+}

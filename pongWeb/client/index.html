@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Multijoueur</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="galaxy">
+    <div class="stars"></div>
+</div>
+<div id="menu">
+    <h1>Pong Multijoueur</h1>
+    <div>
+        <button id="vsIA">Jouer contre l'IA</button>
+        <button id="multiplayer">Multijoueur</button>
+    </div>
+    <a target="_blank" href="https://github.com/Fredray-21" id="github">By @Fredray-21</a>
+    <p id="waitingMessage" style="display: none; color: white;">En attente d'un autre joueur...</p>
+</div>
+<canvas id="pongCanvas" width="800" height="600" style="display: none;"></canvas>
+<script src="game.js"></script>
+</body>
+</html>
