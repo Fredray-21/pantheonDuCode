@@ -1,11 +1,13 @@
 # Pong Web
 
-This is  a simple implementation of the game of life in javascript.
+This is  a simple implementation of the pong game in javascript.
 
 ### Web version of the game :
 
-Follow the instructions below to run it locally.
+### The game is online: 
+Follow this [link](https://poc.frederic-dabadie.fr/pongWeb/) to play the game.  
 
+Or Follow the instructions below to run it locally. 
 ### How to run the game locally:
 Start server in the root directory of the project:
 
