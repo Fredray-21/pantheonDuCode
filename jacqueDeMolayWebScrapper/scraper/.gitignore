@@ -1,0 +1,37 @@
+# Fichiers binaires et temporaires
+*.exe
+*.dll
+*.lib
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.log
+*.tlog
+*.lastbuildstate
+*.VC.db
+
+# Répertoires de build
+/Debug/
+/Release/
+/bin/
+/obj/
+
+# Fichiers spécifiques à Visual Studio
+.vs/
+*.suo
+*.user
+*.vcxproj.user
+.vscode/
+
+# Fichiers de CMake (si tu utilises CMake)
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CMakeLists.txt.user
+cmake-build-debug/
+cmake-build-release/
+
+# Autres fichiers spécifiques à ton environnement
+.DS_Store
+Thumbs.db

@@ -1,0 +1,6 @@
+C:\Users\pt_fr\source\repos\scraper\x64\Debug\libcurl-d.dll
+C:\Users\pt_fr\source\repos\scraper\x64\Debug\zlibd1.dll
+C:\Users\pt_fr\source\repos\scraper\x64\Debug\libxml2.dll
+C:\Users\pt_fr\source\repos\scraper\x64\Debug\liblzma.dll
+C:\Users\pt_fr\source\repos\scraper\x64\Debug\iconv-2.dll
+C:\Users\pt_fr\source\repos\scraper\scraper\x64\Debug\scraper.vcxproj.Up2Date
