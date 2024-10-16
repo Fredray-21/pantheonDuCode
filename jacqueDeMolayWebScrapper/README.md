@@ -1,4 +1,4 @@
-# JackDeMolay Web Scrapper
+# JacqueDeMolay Web Scrapper
 
 This is a simple web scrapper that will get the information from the website.
 
