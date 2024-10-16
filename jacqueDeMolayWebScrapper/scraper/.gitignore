@@ -1,9 +1,6 @@
 # Fichiers binaires et temporaires
-*.exe
-*.dll
 *.lib
 *.obj
-*.pdb
 *.ilk
 *.idb
 *.log
