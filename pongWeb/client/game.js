@@ -39,6 +39,7 @@ let multiplayerMouseMoveListener;
 
 document.getElementById("vsIA").addEventListener("click", () => {
     startGame(false);
+    toggleStarsAnimation();
 });
 
 document.getElementById("multiplayer").addEventListener("click", () => {
@@ -46,6 +47,7 @@ document.getElementById("multiplayer").addEventListener("click", () => {
     if (username.trim() !== "") {
         startGame(true);
     }
+
 });
 
 const startGame = (multiplayer) => {
@@ -99,6 +101,8 @@ connectToServer = () => {
                 gameRole = data.role;
                 document.getElementById("waitingMessage").style.display = "none";
                 document.getElementById("menu").style.display = "none";
+                const starsElement = document.querySelector('.stars');
+                starsElement.style.animation = "none";
                 canvas.style.display = "block";
 
                 dvdLogo.src = './DVD_logo.svg';
@@ -109,6 +113,8 @@ connectToServer = () => {
                 alert(data.winner);
                 resetGame();
                 document.getElementById("menu").style.display = "flex";
+                const starsElement = document.querySelector('.stars');
+                starsElement.style.animation = "";
             }
         } else if (data.type === "update") {
             // Receive paddle and ball updates from the server
