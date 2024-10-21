@@ -220,7 +220,7 @@ const aStar = (start, end) => {
 
     console.log("Aucun chemin trouvé !");
     loader.innerText = "Aucun chemin trouvé !, veuillez réessayer avec des points de départ et d'arrivée plus proches des routes.";
-    loader.style.display = "block";
+    loader.style.display = "flex";
     const button = document.createElement('button');
     button.innerText = "Réessayer";
     button.onclick = () => window.location.reload();
@@ -255,7 +255,7 @@ const reconstructPath = (cameFrom, current) => {
 // Fonction pour initialiser et lancer la recherche
 const initialize = async () => {
     try {
-        loader.style.display = 'block';
+        loader.style.display = 'flex';
         loader.innerText = "Récupération des routes...";
 
         const distanceBetweenPoints = calculateDistance(startCoords[0], startCoords[1], endCoords[0], endCoords[1]);
