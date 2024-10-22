@@ -221,6 +221,7 @@ const aStar = (start, end) => {
     console.log("Aucun chemin trouvé !");
     loader.innerText = "Aucun chemin trouvé !, veuillez réessayer avec des points de départ et d'arrivée plus proches des routes.";
     loader.style.display = "flex";
+    loader.style.flexDirection = "column";
     const button = document.createElement('button');
     button.innerText = "Réessayer";
     button.onclick = () => window.location.reload();
@@ -281,10 +282,9 @@ const initialize = async () => {
             console.error("Nœud de départ ou d'arrivée non trouvé !");
             loader.innerText = "Nœud de départ ou d'arrivée non trouvé !";
         }
+
     } catch (error) {
         console.error("Erreur lors de l'initialisation :", error);
-    } finally {
-        loader.style.display = 'none';
     }
 };
 
