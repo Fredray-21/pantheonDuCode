@@ -1,69 +1,60 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table de Poker</title>
     <link rel="stylesheet" href="styles.css">
-    <title>Probabilités de Poker</title>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Calculateur de Probabilités de Poker</h1>
-        <div id="grid">
-            <div id="helper">
-                <!-- const suits = ['H', 'D', 'C', 'S']; // Coeurs, Carreaux, Trèfles, Piques
-    const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']; -->
-                <h2>Cartes</h2>
-                <p>Les cartes sont représentées par une lettre et un chiffre. La lettre représente la couleur de la
-                    carte et
-                    le chiffre représente la valeur de la carte.</p>
-                <p>Les couleurs sont représentées par les lettres suivantes:</p>
-                <ul>
-                    <li>H: Coeur</li>
-                    <li>D: Carreau</li>
-                    <li>C: Trèfle</li>
-                    <li>S: Pique</li>
-                </ul>
-                <p>Les valeurs sont représentées par les chiffres suivants:</p>
-                <ul>
-                    <li>2 à 9: Les cartes de 2 à 9</li>
-                    <li>T: 10</li>
-                    <li>J: Valet</li>
-                    <li>Q: Dame</li>
-                    <li>K: Roi</li>
-                    <li>A: As</li>
-            </div>
-
-            <div>
-                <div id="card-options" class="card-options">
-                    <label for="card1">Carte 1 :</label>
-                    <input type="text" id="card1" placeholder="Ex: AH pour As de Coeur" >
-                    <label for="card2">Carte 2 :</label>
-                    <input type="text" id="card2" placeholder="Ex: KH pour Roi de Coeur" >
-                    <label for="numPlayers">Nombre de Joueurs:</label>
-                    <select id="numPlayers">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-
-                <button id="calculate">Calculer les Probabilités sur 50 000 rounds</button>
-                <div id="result" class="result">
-                    <h2>Probabilités de main Gagnante</h2>
-                    <p id="preflop"></p>
-                    <p id="flop"></p>
-                    <p id="turn"></p>
-                    <p id="river"></p>
-                </div>
-            </div>
-        </div>
+<div class="controls">
+    <div class="control" >
+        <label for="player-count">Nombre de joueurs:</label>
+        <select id="player-count">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
     </div>
-    <script src="script.js"></script>
-</body>
+    <div class="control">
+        <label for="game-stage">Étape de jeu:</label>
+        <select id="game-stage">
+            <option value="preflop">Préflop</option>
+            <option value="flop">Flop</option>
+            <option value="turn">Turn</option>
+            <option value="river">River</option>
+        </select>
+    </div>
+</div>
 
+<div id="card-modal" class="modal hidden-modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Sélectionnez votre carte</h2>
+        <div id="deck"></div>
+    </div>
+</div>
+
+<div class="poker-table" id="poker-table">
+    <div class="community-cards" id="community-cards">
+        <div class="card card1 common hidden"></div>
+        <div class="card card2 common hidden"></div>
+        <div class="card card3 common hidden"></div>
+        <div class="card card4 common hidden"></div>
+        <div class="card card5 common hidden"></div>
+    </div>
+</div>
+
+<button id="calculateProbabilities">Calculer les probabilités</button>
+
+
+<script src="script.js"></script>
+</body>
 </html>

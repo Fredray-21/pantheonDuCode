@@ -1,82 +1,105 @@
-    html,
-    body {
-        height: 100%;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-    }
+@import "./modal.css";
 
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #477148;
-        margin: 0;
-        padding: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: green;
+}
 
-    * {
-        box-sizing: border-box;
-    }
+.controls {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-    .container {
-        max-width: 800px;
-        width: 100%;
-        margin: auto;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+.control {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 250px;
+}
 
-    #grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2em;
-    }
+.control select {
+    flex: 1 1 auto;
+    padding: 5px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: white;
+    color: #333;
+    font-size: 16px;
+}
 
-    h1 {
-        text-align: center;
-        color: #333;
-    }
+.poker-table {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background-color: #4b7b3f;
+    border: 10px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    .card-options {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin: 20px 0;
-        gap: 1em;
-    }
+.player {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
 
-    input[type="text"],
-    select {
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
+.player-label {
+    margin-bottom: 5px;
+}
 
-    button {
-        width: 100%;
-        padding: 10px;
-        background-color: #800080;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
+.card-container {
+    display: flex;
+    gap: 5px; /* Espace entre les cartes */
+}
 
-    button:hover {
-        background-color: #6a006a;
-    }
+.card {
+    width: 50px;
+    height: 70px;
+    background-color: white;
+    border: 1px solid #333;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    cursor: pointer;
+    font-size: 1.5em;
+}
 
-    .result {
-        margin-top: 20px;
-    }
+.community-cards {
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 
-    .result h2 {
-        display: none;
-    }
+.common {
+    width: 50px;
+    height: 70px;
+    background-color: white;
+    border: 1px solid #333;
+    border-radius: 8px;
+}
+
+.hidden {
+    background-color: grey; /* Carte face cachée */
+}

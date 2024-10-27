@@ -1,0 +1,64 @@
+.modal {
+    display: flex; /* Masqué par défaut */
+    position: fixed; /* Reste en place */
+    z-index: 1; /* Au-dessus de tout */
+    left: 0;
+    top: 0;
+    width: 100%; /* Plein écran */
+    height: 100%; /* Plein écran */
+    overflow: auto; /* Active le défilement si nécessaire */
+    background-color: rgb(0,0,0); /* Couleur de fond */
+    background-color: rgba(0,0,0,0.4); /* Noir avec opacité */
+}
+
+.hidden-modal {
+    display: none;
+}
+
+.deck-card {
+    cursor: pointer;
+    width: 2em;
+    height: 3em;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#deck {
+    max-width: 750px;
+    display: grid;
+    grid-template-columns: repeat(13, 1fr);
+    gap: 1em;
+}
+
+#deck > div:nth-child(-n+26) {
+    color: red;
+}
+
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 2em;
+    border: 1px solid #888;
+}
+
+.card-disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
