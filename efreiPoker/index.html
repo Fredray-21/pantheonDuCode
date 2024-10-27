@@ -7,31 +7,36 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="controls">
-    <div class="control" >
-        <label for="player-count">Nombre de joueurs:</label>
-        <select id="player-count">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-        </select>
+<div id="header">
+    <div id="resultRank"></div>
+    <div class="controls">
+        <div class="control">
+            <label for="player-count">Nombre de joueurs:</label>
+            <select id="player-count">
+                <option value="1">1</option>
+                <option selected value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        <div class="control">
+            <label for="game-stage">Étape de jeu:</label>
+            <select id="game-stage">
+                <option value="preflop">Préflop</option>
+                <option value="flop">Flop</option>
+                <option value="turn">Turn</option>
+                <option value="river">River</option>
+            </select>
+        </div>
+        <div id="resultPercentages"></div>
     </div>
-    <div class="control">
-        <label for="game-stage">Étape de jeu:</label>
-        <select id="game-stage">
-            <option value="preflop">Préflop</option>
-            <option value="flop">Flop</option>
-            <option value="turn">Turn</option>
-            <option value="river">River</option>
-        </select>
-    </div>
+
 </div>
 
 <div id="card-modal" class="modal hidden-modal">
@@ -55,6 +60,6 @@
 <button id="calculateProbabilities">Calculer les probabilités</button>
 
 
-<script src="script.js"></script>
+<script type="module" src="js/script.js"></script>
 </body>
 </html>

@@ -1,3 +1,5 @@
+import * as utils from './utils.js';
+
 document.addEventListener("DOMContentLoaded", function () {
     const playerCountSelect = document.getElementById("player-count");
     const gameStageSelect = document.getElementById("game-stage");
@@ -6,20 +8,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const cardModal = document.getElementById("card-modal");
     const deckContainer = document.getElementById("deck");
     const closeModal = document.querySelector(".close");
-
     const calculateProbabilitiesBtn = document.getElementById("calculateProbabilities");
+    const resultRankContainer = document.getElementById("resultRank");
+    const resultPercentages = document.getElementById("resultPercentages");
 
-    let playersHands = [];
-    let communityCards = Array(5).fill(null); // Tableau pour stocker les cartes communes
-    let deck = createDeck();
+
+
 
     const valueToDisplay = (value) => {
         return value.replace(/[HDSC]/g, match => {
             switch (match) {
-                case 'H': return '♥';
-                case 'D': return '♦';
-                case 'C': return '♣';
-                case 'S': return '♠';
+                case 'H':
+                    return '♥';
+                case 'D':
+                    return '♦';
+                case 'C':
+                    return '♣';
+                case 'S':
+                    return '♠';
             }
         });
     };
@@ -27,13 +33,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const displayToValue = (display) => {
         return display.replace(/[♥♦♣♠]/g, match => {
             switch (match) {
-                case '♥': return 'H';
-                case '♦': return 'D';
-                case '♣': return 'C';
-                case '♠': return 'S';
+                case '♥':
+                    return 'H';
+                case '♦':
+                    return 'D';
+                case '♣':
+                    return 'C';
+                case '♠':
+                    return 'S';
             }
         });
     };
+
+    const createDeck = () => {
+        const suits = ['H', 'D', 'C', 'S'];
+        const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
+        return suits.flatMap(suit => ranks.map(rank => rank + suit));
+    }
+
+    let playersHands = [];
+    let communityCards = Array(5).fill(null); // Tableau pour stocker les cartes communes
+    let deck = createDeck();
 
     const isCardInUse = (card) => {
         return playersHands.some(hand => hand.includes(card)) || communityCards.includes(card);
@@ -47,10 +67,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const existingPlayers = pokerTable.querySelectorAll(".player");
         existingPlayers.forEach(player => player.remove());
 
-        playersHands = Array.from({ length: playerCount }, (_, i) => savedPlayerHands[i] || [null, null]);
+        playersHands = Array.from({length: playerCount}, (_, i) => savedPlayerHands[i] || [null, null]);
 
         // Placement des joueurs autour de la table
-        const playerLabels = ["Moi", ...Array.from({ length: playerCount - 1 }, (_, i) => `Player ${i + 2}`)];
+        const playerLabels = ["Moi", ...Array.from({length: playerCount - 1}, (_, i) => `Player ${i + 2}`)];
         const radius = 230;
         const baseAngle = 90;
         const angleStep = 360 / playerCount;
@@ -103,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const updateCommunityCards = () => {
         const stage = gameStageSelect.value;
-        const cardCount = { preflop: 0, flop: 3, turn: 4, river: 5 }[stage];
+        const cardCount = {preflop: 0, flop: 3, turn: 4, river: 5}[stage];
 
         const existingCards = communityCardsContainer.querySelectorAll(".card");
         existingCards.forEach(card => card.classList.add("hidden"));
@@ -151,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         cardModal.classList.remove("hidden-modal");
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target == cardModal) {
                 closeModal.click();
             }
@@ -197,10 +217,65 @@ document.addEventListener("DOMContentLoaded", function () {
     updateTable();
     updateCommunityCards();
 
-    const createDeck = () => {
-        const suits = ['H', 'D', 'C', 'S'];
-        const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
-        return suits.flatMap(suit => ranks.map(rank => rank + suit));
-    }
+
+    calculateProbabilitiesBtn.addEventListener("click", () => {
+        const playerHand = playersHands[0]; // Main du joueur "Moi"
+
+        // Vérifier que le joueur a ses cartes
+        if (playerHand.includes(null)) {
+            alert("Vous devez sélectionner vos deux cartes.");
+            return;
+        }
+
+        // Récupérer les mains des adversaires
+        const opponentsHands = playersHands.slice(1);
+
+        // Récupérer les cartes communautaires déjà définies
+        const communityCardsForSimu = communityCards.filter(card => card !== null);
+
+        // Récupérer l'état de la table
+        const tableState = gameStageSelect.value; // préflop, flop, turn ou river
+
+        console.log("start game :",playerHand, opponentsHands, communityCardsForSimu, tableState);
+
+        // Calculer le pourcentage de victoire
+        const { ranks, playerWinPercentage, otherPlayersWinPercentage } = utils.simulateGames(playerHand, opponentsHands, communityCardsForSimu, tableState);
+
+        console.log("rank :",ranks);
+        console.log("player :",playerWinPercentage);
+        console.log("other :",otherPlayersWinPercentage);
+
+        // clear des resultats
+        resultRankContainer.innerHTML = '';
+        resultPercentages.innerHTML = '';
+
+        // draw rank and percentage in resultContainer
+        const rankContainer = document.createElement("div");
+        rankContainer.className = "rank-container";
+        for (const rank in ranks) {
+            const rankElement = document.createElement("div");
+            rankElement.textContent = `${rank}: ${ranks[rank].toFixed(2)}%`;
+            rankContainer.appendChild(rankElement);
+        }
+        resultRankContainer.appendChild(rankContainer);
+
+        // Draw player win percentage
+        const playerWinPercentageElement = document.createElement("div");
+        playerWinPercentageElement.textContent = `(YOU) Win: ${playerWinPercentage.toFixed(2)}%`;
+        resultPercentages.appendChild(playerWinPercentageElement);
+
+        // Draw other players win percentage
+        const otherPlayersWinPercentageElement = document.createElement("div");
+        otherPlayersWinPercentageElement.textContent = `(OTHER) Win: ${otherPlayersWinPercentage.toFixed(2)}%`;
+        resultPercentages.appendChild(otherPlayersWinPercentageElement);
+
+        // Scroll to resultContainer
+        resultPercentages.scrollIntoView({ behavior: "smooth" });
+
+
+
+    });
+
 
 });
+
