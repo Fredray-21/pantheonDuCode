@@ -278,6 +278,13 @@ calculateButton.addEventListener('click', async () => {
         return;
     }
 
+    // verification si les cartes sont valides
+    const validCards = createDeck();
+    if (!validCards.includes(card1Input.value.toUpperCase()) || !validCards.includes(card2Input.value.toUpperCase())) {
+        alert('Cartes invalides');
+        return;
+    }
+
     await new Promise(resolve => {
         calculateButton.innerText = 'Calcul en cours...';
         setTimeout(resolve, 1000)
