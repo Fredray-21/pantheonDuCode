@@ -272,6 +272,12 @@ const isWinningHandPreflop = (playerHand, opponentsHands) => {
 // Action Event pour calculé les probabilités
 calculateButton.addEventListener('click', async () => {
 
+    // vérification des inputs
+    if (!card1Input.value || !card2Input.value || !numPlayersInput.value) {
+        alert('Veuillez remplir tous les champs');
+        return;
+    }
+
     await new Promise(resolve => {
         calculateButton.innerText = 'Calcul en cours...';
         setTimeout(resolve, 1000)
