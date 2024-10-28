@@ -12,16 +12,52 @@ body {
     background-color: green;
 }
 
-#header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    background: none;
-    height: 200px;
+body h1 {
     color: white;
+    margin-bottom: 0;
+}
+
+
+#controls {
+    position: absolute;
+    top: 20px;
+    left: calc(100% - 320px);;
+    align-items: end;
+    display: flex;
+    width: 300px;
+}
+
+#resultRank {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+}
+
+#resultRank table tr td:first-child {
+    padding-right: 20px;
+}
+
+#resultRank table {
+    margin-bottom: 1em
+}
+
+#resultRank .percentage-table tr td {
+    text-align: right;
+}
+
+#resultRank .percentage-table tr td:first-child {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+
+#resultPercentages {
+    position: absolute;
+    top: 20px;
+    left: calc(50% - 300px);
+    color: white;
+    width: 300px;
 }
 
 .controls {
@@ -117,6 +153,18 @@ body {
 
 .hidden {
     background-color: grey; /* Carte face cachée */
+}
+
+#calculateProbabilities {
+    position: relative;
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    top: 10em;
+    left: 0;
 }
 
 

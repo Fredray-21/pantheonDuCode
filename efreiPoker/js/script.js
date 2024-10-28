@@ -10,9 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeModal = document.querySelector(".close");
     const calculateProbabilitiesBtn = document.getElementById("calculateProbabilities");
     const resultRankContainer = document.getElementById("resultRank");
-    const resultPercentages = document.getElementById("resultPercentages");
-
-
 
 
     const valueToDisplay = (value) => {
@@ -218,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateCommunityCards();
 
 
-    calculateProbabilitiesBtn.addEventListener("click", () => {
+    calculateProbabilitiesBtn.addEventListener("click", async () => {
         const playerHand = playersHands[0]; // Main du joueur "Moi"
 
         // Vérifier que le joueur a ses cartes
@@ -226,6 +223,12 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Vous devez sélectionner vos deux cartes.");
             return;
         }
+
+        await new Promise(resolve => {
+            calculateProbabilitiesBtn.innerText = "Calcul en cours...";
+            setTimeout(resolve, 1000)
+        });
+
 
         // Récupérer les mains des adversaires
         const opponentsHands = playersHands.slice(1);
@@ -236,46 +239,88 @@ document.addEventListener("DOMContentLoaded", function () {
         // Récupérer l'état de la table
         const tableState = gameStageSelect.value; // préflop, flop, turn ou river
 
-        console.log("start game :",playerHand, opponentsHands, communityCardsForSimu, tableState);
+        console.log("start game :", playerHand, opponentsHands, communityCardsForSimu, tableState);
 
         // Calculer le pourcentage de victoire
-        const { ranks, playerWinPercentage, otherPlayersWinPercentage } = utils.simulateGames(playerHand, opponentsHands, communityCardsForSimu, tableState);
+        const {
+            ranks,
+            playerWinPercentage,
+            otherPlayersWinPercentage
+        } = utils.simulateGames(playerHand, opponentsHands, communityCardsForSimu, tableState);
 
-        console.log("rank :",ranks);
-        console.log("player :",playerWinPercentage);
-        console.log("other :",otherPlayersWinPercentage);
+        console.log("rank :", ranks);
+        console.log("player :", playerWinPercentage);
+        console.log("other :", otherPlayersWinPercentage);
 
-        // clear des resultats
+        // Clear the results
         resultRankContainer.innerHTML = '';
-        resultPercentages.innerHTML = '';
 
-        // draw rank and percentage in resultContainer
-        const rankContainer = document.createElement("div");
-        rankContainer.className = "rank-container";
+        // Create a table for ranks
+        const rankTable = document.createElement("table");
+        rankTable.className = "rank-table";
+
+        // Create the table header
+        const headerRow = document.createElement("tr");
+        const rankHeader = document.createElement("th");
+        rankHeader.textContent = "Rank";
+        const percentageHeader = document.createElement("th");
+        percentageHeader.textContent = "Percentage";
+        headerRow.appendChild(rankHeader);
+        headerRow.appendChild(percentageHeader);
+        rankTable.appendChild(headerRow);
+
+        // Add each rank as a row in the table
         for (const rank in ranks) {
-            const rankElement = document.createElement("div");
-            rankElement.textContent = `${rank}: ${ranks[rank].toFixed(2)}%`;
-            rankContainer.appendChild(rankElement);
+            const rankRow = document.createElement("tr");
+
+            // Create the rank cell
+            const rankCell = document.createElement("td");
+            rankCell.textContent = rank;
+            rankRow.appendChild(rankCell);
+
+            // Create the percentage cell
+            const percentageCell = document.createElement("td");
+            percentageCell.textContent = `${ranks[rank].toFixed(2)}%`;
+            rankRow.appendChild(percentageCell);
+
+            rankTable.appendChild(rankRow);
         }
-        resultRankContainer.appendChild(rankContainer);
 
-        // Draw player win percentage
-        const playerWinPercentageElement = document.createElement("div");
-        playerWinPercentageElement.textContent = `(YOU) Win: ${playerWinPercentage.toFixed(2)}%`;
-        resultPercentages.appendChild(playerWinPercentageElement);
+        // Append the rank table to the resultRankContainer
+        resultRankContainer.appendChild(rankTable);
 
-        // Draw other players win percentage
-        const otherPlayersWinPercentageElement = document.createElement("div");
-        otherPlayersWinPercentageElement.textContent = `(OTHER) Win: ${otherPlayersWinPercentage.toFixed(2)}%`;
-        resultPercentages.appendChild(otherPlayersWinPercentageElement);
+// Créer un tableau sans en-tête pour les pourcentages
+        const percentageTable = document.createElement("table");
+        percentageTable.className = "percentage-table";
 
-        // Scroll to resultContainer
-        resultPercentages.scrollIntoView({ behavior: "smooth" });
+        // Créer la ligne pour le pourcentage de victoire du joueur
+        const playerRow = document.createElement("tr");
+        const playerLabelCell = document.createElement("td");
+        playerLabelCell.textContent = "(YOU) Win:";
+        const playerPercentageCell = document.createElement("td");
+        playerPercentageCell.textContent = `${playerWinPercentage.toFixed(2)}%`;
+        playerRow.appendChild(playerLabelCell);
+        playerRow.appendChild(playerPercentageCell);
+        percentageTable.appendChild(playerRow);
 
+        // Créer la ligne pour le pourcentage de victoire des autres joueurs
+        const otherPlayersRow = document.createElement("tr");
+        const otherLabelCell = document.createElement("td");
+        otherLabelCell.textContent = "(OTHER) Win:";
+        const otherPercentageCell = document.createElement("td");
+        otherPercentageCell.textContent = `${otherPlayersWinPercentage.toFixed(2)}%`;
+        otherPlayersRow.appendChild(otherLabelCell);
+        otherPlayersRow.appendChild(otherPercentageCell);
+        percentageTable.appendChild(otherPlayersRow);
 
+        // Ajouter le tableau des pourcentages au conteneur de résultats
+        resultRankContainer.appendChild(percentageTable);
+
+        await new Promise(resolve => {
+            calculateProbabilitiesBtn.innerText = "Calculer les probabilités";
+            setTimeout(resolve, 1000)
+        });
 
     });
-
-
 });
 
