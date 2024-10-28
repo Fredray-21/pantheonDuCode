@@ -9,12 +9,15 @@
     <link rel="icon" href="./assets/favicon.svg"/>
 </head>
 <body>
-
-<h1>Jeu d'échec</h1>
-<h2 id="currentPlayer">Tour de: White</h2>
-<canvas id="game" width="600" height="600"></canvas>
+<div id="menu">
+    <h1>Jeu d'échec</h1>
+    <button id="soloButton">Solo</button>
+    <button id="multiButton">Multijoueur</button>
+</div>
+<h2 id="currentPlayer" style="display:none;">Tour de: White</h2>
+<canvas id="game" width="600" height="600" style="display:none;"></canvas>
 
 <script type="module" src="./assets/js/game.js"></script>
-
 </body>
+
 </html>
