@@ -11,6 +11,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const calculateProbabilitiesBtn = document.getElementById("calculateProbabilities");
     const resultRankContainer = document.getElementById("resultRank");
 
+    // init select if is saved in local storage
+    const savedPlayerCount = localStorage.getItem('playerCount');
+    const savedStage = localStorage.getItem('stage');
+    if (savedPlayerCount) playerCountSelect.value = savedPlayerCount;
+    if (savedStage) gameStageSelect.value = savedStage;
 
     const valueToDisplay = (value) => {
         return value.replace(/[HDSC]/g, match => {
@@ -58,6 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const updateTable = () => {
         const playerCount = parseInt(playerCountSelect.value);
+
+        localStorage.setItem('playerCount', playerCount);
+
         const savedPlayerHands = [...playersHands];
 
         // Effacer les joueurs actuels
@@ -120,6 +128,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const updateCommunityCards = () => {
         const stage = gameStageSelect.value;
+        localStorage.setItem('stage', stage);
+
         const cardCount = {preflop: 0, flop: 3, turn: 4, river: 5}[stage];
 
         const existingCards = communityCardsContainer.querySelectorAll(".card");
