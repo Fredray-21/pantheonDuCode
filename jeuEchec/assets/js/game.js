@@ -16,9 +16,11 @@ let selectedPiece = null;
 let possibleMoves = [];
 let currentPlayer = 'white';
 let isGameOver = false;
+let imWaiting = false;
 
 // Fonction pour démarrer le mode multijoueur
 const startMultiGame = () => {
+    if (imWaiting) return;
     isMultiplayer = true;
 
     socket = new WebSocket('ws://localhost:3000');
@@ -35,6 +37,7 @@ const startMultiGame = () => {
                 // Affiche un message d'attente pour un autre joueur
                 waitingMessage.textContent = data.message;
                 waitingMessage.style.display = 'block';
+                imWaiting = true;
                 break;
 
             case 'start':
@@ -44,6 +47,7 @@ const startMultiGame = () => {
                 currentPlayerContainer.style.display = 'block';
 
                 waitingMessage.style.display = 'none';
+                imWaiting = false;
                 myColor = data.color;
                 currentPlayer = data.currentPlayer;
                 drawBoard();
@@ -63,7 +67,7 @@ const startMultiGame = () => {
             case 'promotion':
                 // Remplace la pièce promue par le nouveau type de pièce reçu
                 const promotedPiece = board[data.row][data.col];
-                console.log(data,promotedPiece); // ici j'ai : null hmmmm why
+                console.log(data, promotedPiece); // ici j'ai : null hmmmm why
 
                 // si j'ai une piece je promue avec le type reçu
                 if (promotedPiece) {
@@ -215,7 +219,7 @@ export const drawBoard = () => {
         }
     }
 
-    currentPlayerContainer.textContent = `Tour de: ${currentPlayer.charAt(0).toUpperCase() + currentPlayer.slice(1)}`;
+    currentPlayerContainer.textContent = `Tour de: ${currentPlayer.charAt(0).toUpperCase() + currentPlayer.slice(1)} (${isMultiplayer ? (currentPlayer === myColor ? 'Vous' : 'Adversaire') : (currentPlayer === 'black' ? 'IA' : 'Vous')})`;
 }
 
 

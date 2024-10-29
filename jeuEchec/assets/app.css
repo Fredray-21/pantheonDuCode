@@ -29,4 +29,41 @@ h1 {
 }
 
 
+#menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 2em;
+}
+
+#menu h1 {
+    margin-bottom: 20px;
+}
+
+#menu button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 1.5em;
+    background-color: #dc4fdc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+#menu button:hover {
+    background-color: #c218c2;
+}
+
+#menu h1 {
+    margin-bottom: 0;
+}
+
+#credit a {
+    color: #dc4fdc;
+}
+
 
