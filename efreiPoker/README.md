@@ -1,6 +1,6 @@
 ## efreiPoker
 
-This is an implementation of winning probability calculations for a poker hand (2 cards) in four possible scenarios: preflop, flop, turn, and river. The program estimates winning probabilities based on a simulation of **50,000 rounds**.
+This is an implementation of winning probability calculations for a poker hand (2 cards) in four possible scenarios: preflop, flop, turn, and river. The program estimates winning probabilities based on a simulation of **100,000 rounds**.
 
 Additionally, users can choose the number of players at the table, ranging from **1 to 5**, to see how this affects the winning probabilities.
 
