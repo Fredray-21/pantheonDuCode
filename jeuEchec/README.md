@@ -3,21 +3,26 @@
 This is a simple game of chess implemented in JavaScript.
 
 
-### Web version of the game available online:
+### The game is online:
+Follow this [link](https://poc.frederic-dabadie.fr/jeuEchec/) to play the game.
 
-Check the game [in this link](https://poc.frederic-dabadie.fr/chess/) or follow the instructions below to run it locally.
-
+Or Follow the instructions below to run it locally.
 ### How to run the game locally:
-Go to http://localhost:8000/ in your browser.
+Start server in the root directory of the project:
 
-#### Start a local server:
-In the root directory of the project, run the following command in the terminal:
+```powershell
+node server/server.js
+```
+Then open your browser and go to the following page:
 
 ```powershell
 py -m http.server
 ```
 
-
 # RELEASES
 - **_[16/10/2024]_**  
   - Implement the game logic and interface.
+- **_[28/10/2024]_**
+  - Add AI and multiplayer mode.
+- **_[30/10/2024]_**
+  - Add style to the game.
