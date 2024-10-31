@@ -13,10 +13,5 @@ RUN npm install
 # Copiez tous les fichiers de l'application dans le répertoire de travail du conteneur
 COPY . .
 
-# Exposez le port sur lequel votre bot Discord écoute (par exemple, 8080)
-EXPOSE 4567
-
-RUN npm run build
-
 # Commande pour démarrer votre application Discord
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "all"]
