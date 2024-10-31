@@ -1,0 +1,38 @@
+{
+  "name": "pocBot",
+  "version": "1.1.1",
+  "description": "This template provides boilerplate code for Discord.js v14. Ready for slash command and everything you need to start out with your bot!",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node ./dist/index.js",
+    "all": "npm run build && npm run start"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "consola": "^3.2.3",
+    "discord.js": "^14.15.2",
+    "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2",
+    "tsx": "^4.15.5",
+    "typescript": "^5.4.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fredray-21/pantheonDuCode.git"
+  },
+  "keywords": [
+    "discordjs",
+    "discord-bot",
+    "discordjs-v14"
+  ],
+  "author": "mezotv (Dominik)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Fredray-21/pantheonDuCode/issues"
+  },
+  "homepage": "https://github.com/Fredray-21/pantheonDuCode/botDiscord#readme",
+  "devDependencies": {
+  }
+}
